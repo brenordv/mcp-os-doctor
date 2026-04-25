@@ -5,6 +5,7 @@
 *.sln.docstates
 *.suo
 *.swp
+.claude/*
 *.user
 *.userosscache
 .DS_Store
