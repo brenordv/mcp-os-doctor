@@ -1,0 +1,25 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Scripts and Docs/">
+    <File Path="CONTRIBUTING.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="LICENSE.md" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Scripts and Docs/Test/">
+    <File Path="src/tests/Directory.Build.props" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="src/tests/McpOsDoctor.Core.Tests/McpOsDoctor.Core.Tests.csproj" />
+    <Project Path="src/tests/McpOsDoctor.Platform.Windows.Tests/McpOsDoctor.Platform.Windows.Tests.csproj" />
+    <Project Path="src/tests/McpOsDoctor.Tools.Tests/McpOsDoctor.Tools.Tests.csproj" />
+  </Folder>
+  <Project Path="src/McpOsDoctor.Core/McpOsDoctor.Core.csproj" />
+  <Project Path="src/McpOsDoctor.Platform.Windows/McpOsDoctor.Platform.Windows.csproj" />
+  <Project Path="src/McpOsDoctor.Server/McpOsDoctor.Server.csproj" />
+  <Project Path="src/McpOsDoctor.Tools/McpOsDoctor.Tools.csproj" />
+</Solution>

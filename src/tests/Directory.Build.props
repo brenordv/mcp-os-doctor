@@ -1,0 +1,10 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <!-- Test projects don't need XML docs -->
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <!-- Disable IDE0005 for tests since we disable GenerateDocumentationFile -->
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+</Project>

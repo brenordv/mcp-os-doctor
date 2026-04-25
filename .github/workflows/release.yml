@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
+        with:
+          dotnet-version: '10.x'
+
+      - name: Restore
+        run: dotnet restore McpOsDoctor.slnx
+
+      - name: Check formatting
+        run: dotnet format McpOsDoctor.slnx --verify-no-changes --verbosity diagnostic
+
+      - name: Test
+        run: dotnet test McpOsDoctor.slnx --no-restore --configuration Release
+
+      - name: Publish
+        run: dotnet publish src/McpOsDoctor.Server/McpOsDoctor.Server.csproj --no-restore --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true --output ./publish
+
+      - name: Create zip and SHA256
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $zipName = "McpOsDoctor-${tag}-win-x64.zip"
+          $shaName = "${zipName}.sha256"
+
+          Compress-Archive -Path ./publish/* -DestinationPath "./${zipName}"
+
+          $hash = (Get-FileHash -Path "./${zipName}" -Algorithm SHA256).Hash.ToLowerInvariant()
+          "${hash}  ${zipName}" | Out-File -FilePath "./${shaName}" -Encoding utf8 -NoNewline
+
+          echo "ZIP_NAME=${zipName}" >> $env:GITHUB_ENV
+          echo "SHA_NAME=${shaName}" >> $env:GITHUB_ENV
+
+      - name: Create draft release with assets
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
+        with:
+          name: ${{ github.ref_name }}
+          draft: true
+          generate_release_notes: true
+          make_latest: true
+          files: |
+            ${{ env.ZIP_NAME }}
+            ${{ env.SHA_NAME }}
+
+      - name: Publish release
+        run: gh release edit "${{ github.ref_name }}" --draft=false
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
