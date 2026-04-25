@@ -22,7 +22,7 @@ jobs:
           dotnet-version: '10.0.100'
 
       - name: Restore
-        run: dotnet restore McpOsDoctor.slnx --runtime win-x64
+        run: dotnet restore McpOsDoctor.slnx
 
       - name: Check formatting
         run: dotnet format McpOsDoctor.slnx --verify-no-changes --verbosity diagnostic
@@ -31,7 +31,7 @@ jobs:
         run: dotnet test McpOsDoctor.slnx --no-restore --configuration Release
 
       - name: Publish
-        run: dotnet publish src/McpOsDoctor.Server/McpOsDoctor.Server.csproj --no-restore --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true --output ./publish
+        run: dotnet publish src/McpOsDoctor.Server/McpOsDoctor.Server.csproj --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true --output ./publish
 
       - name: Create zip and SHA256
         shell: pwsh
