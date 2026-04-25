@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using McpOsDoctor.Core.Enums;
 using McpOsDoctor.Core.Errors;
 using McpOsDoctor.Core.Interfaces;
